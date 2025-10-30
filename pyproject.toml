@@ -1,0 +1,28 @@
+[project]
+name = "screen-translate"
+version = "0.1.0"
+description = "Desktop app for real-time screen subtitle translation"
+authors = [{ name = "Screen Translate Team" }]
+requires-python = ">=3.11"
+dependencies = [
+    "PySide6>=6.7",
+    "mss>=9.0",
+    "easyocr>=1.7",
+    "requests>=2.32",
+    "pydantic>=2.7",
+    "loguru>=0.7",
+    "numpy>=1.26"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3",
+    "pytest-qt>=4.4",
+    "mypy>=1.11",
+    "ruff>=0.6",
+    "pytest-mock>=3.14"
+]
+
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
