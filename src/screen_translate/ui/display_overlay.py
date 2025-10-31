@@ -29,6 +29,8 @@ class DisplayOverlay(QWidget):
     # ------------------------------------------------------------------
     def update_text(self, text: str) -> None:
         """Update the overlay text content."""
+        # 清除之前的内容，确保不会累积
+        self._label.setText("")
         self._label.setText(text)
         self._adjust_font_size()
 
@@ -40,11 +42,23 @@ class DisplayOverlay(QWidget):
 
         min_font_size = 10
         max_font_size = max(48, self._style.font_size)
-        available_width = self.width() - 16
-        available_height = self.height() - 16
+
+        # 确保有有效的窗口尺寸
+        if self.width() <= 16 or self.height() <= 16:
+            return
+
+        # 减去实际的padding (4px on each side = 8px total)
+        available_width = self.width() - 8
+        available_height = self.height() - 8
 
         if available_width <= 0 or available_height <= 0:
             return
+
+        # 对于多行文本，预留更多空间
+        lines = text.split('\n')
+        if len(lines) > 1:
+            # 多行文本需要额外的行间距，减少可用高度以确保适配
+            available_height = int(available_height * 0.9)
 
         best_size = min_font_size
 
@@ -66,10 +80,17 @@ class DisplayOverlay(QWidget):
             if len(lines) > 1:
                 total_text_height += (len(lines) - 1) * metrics.leading()
 
+            # 添加一些额外的边距确保显示完全
             if max_line_width <= available_width and total_text_height <= available_height:
                 best_size = size
                 break
 
+        # 应用最佳字体大小
+        font = self._label.font()
+        font.setPointSize(best_size)
+        self._label.setFont(font)
+
+        # 确保样式与padding一致
         rgba = QColor(self._style.background_color)
         bg_color = rgba.name(QColor.HexArgb) if rgba.isValid() else "#33000000"
 
@@ -77,7 +98,7 @@ class DisplayOverlay(QWidget):
             f"color: {self._style.text_color};"
             f"font-family: '{self._style.font_family}';"
             f"font-size: {best_size}px;"
-            "padding: 8px;"
+            "padding: 4px;"
             f"background-color: {bg_color};"
         )
         self._label.update()
@@ -127,7 +148,8 @@ class DisplayOverlay(QWidget):
         label = QLabel("…", self)
         label.setWordWrap(True)
         label.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
-        label.setContentsMargins(8, 8, 8, 8)
+        # 减少内边距以获得更多显示空间
+        label.setContentsMargins(4, 4, 4, 4)
 
         layout.addWidget(label)
         self._label = label
