@@ -81,12 +81,14 @@ class MainController(QObject):
         dlg = SettingsDialog(
             self._config_manager.config.api,
             self._config_manager.config.translation,
+            self._config_manager.config.audio,
             parent=self._main_window
         )
         if dlg.exec():
             new_api = dlg.get_api_config()
             new_translation = dlg.get_translation_config()
-            self._config_manager.update(api=new_api, translation=new_translation)
+            new_audio = dlg.get_audio_config()
+            self._config_manager.update(api=new_api, translation=new_translation, audio=new_audio)
             self._emit_status("设置已保存")
 
     def start_translation(self) -> None:

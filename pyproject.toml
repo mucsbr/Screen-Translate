@@ -11,7 +11,12 @@ dependencies = [
     "requests>=2.32",
     "pydantic>=2.7",
     "loguru>=0.7",
-    "numpy>=1.26"
+    "numpy>=1.26",
+    "pyaudio>=0.2.11",
+    "vosk>=0.3.45",
+    "openai-whisper>=20231117",
+    "torch>=2.1.0",
+    "torchaudio>=2.1.0"
 ]
 
 [project.optional-dependencies]

@@ -24,6 +24,8 @@ def main(argv: Optional[list[str]] = None) -> int:
     Returns:
         Process exit code.
     """
+    import os
+    print('当前工作目录:', os.getcwd())
     setup_logging()
 
     if QtWidgets is None:
